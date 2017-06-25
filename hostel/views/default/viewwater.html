@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+<h2>
+    Plumbing Problems
+</h2>
+<table class="table">
+    <tr>
+        <th>Subject</th>
+        <th>Problem Description</th>
+        <th>Place</th>
+        <th>Status</th>
+        <th>Progress</th>
+        <th>Image</th>
+    </tr>
+    {{for row in rows:}}
+        <tr>
+            <td><FONT SIZE=6><h2>{{=row.subject}}</h2></FONT></td>
+            <td><FONT SIZE=4><b><p>{{=row.description}}</p></b></FONT></td>
+            <td><FONT SIZE=4><strong><i >{{=row.place}}</i></strong></FONT></td>
+            <td><FONT SIZE=4><strong><i >{{=row.status}}</i></strong></FONT></td>
+            <td><FONT SIZE=4><strong><i >{{=row.progress}}</i></strong></FONT></td>
+            <td><img src="{{=URL('default','download',args=row.image)}}" style="height:200px;width:250px;"/></td>
+        </tr>
+    {{pass}}
+    </table>

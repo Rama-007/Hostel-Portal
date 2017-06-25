@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+
+#assuming that person complain his wing /room
+area=['corridor','room','bathroom']
+status=['unapproved','approved']
+progress=['pending','solved']
+yourfloor=['ground','1','2','3']
+db.define_table('electrical',
+               Field('subject',requires=IS_NOT_EMPTY()),
+               Field('description','text',requires=IS_NOT_EMPTY()),
+               Field('image','upload',requires=IS_EMPTY_OR(IS_IMAGE())),
+               Field('place',requires=IS_IN_SET(area)),
+               Field('iden','reference auth_user',default=auth.user_id,readable=False,writable=False),
+               Field('status',default='unapproved',requires=IS_IN_SET(status)),
+               Field('progress',default='pending',requires=IS_IN_SET(progress)),
+                auth.signature
+               )
+
+db.define_table('water',
+               Field('subject',requires=IS_NOT_EMPTY()),
+               Field('description','text',requires=IS_NOT_EMPTY()),
+               Field('image','upload',requires=IS_EMPTY_OR(IS_IMAGE())),
+               Field('place',writable=False,default='bathroom'),
+               Field('iden','reference auth_user',default=auth.user_id,readable=False,writable=False),
+               Field('status',default='unapproved',requires=IS_IN_SET(status)),
+               Field('progress',default='pending',requires=IS_IN_SET(progress)),
+                auth.signature
+               )
+
+db.define_table('washingmachine',
+               Field('description','text',requires=IS_NOT_EMPTY()),
+               Field('floorno',requires=IS_IN_SET(yourfloor)),
+               Field('blocks',requires=IS_IN_SET(blocks)),
+               Field('image','upload',requires=IS_EMPTY_OR(IS_IMAGE())),
+               Field('iden','reference auth_user',default=auth.user_id,readable=False,writable=False),
+               Field('status',default='unapproved',requires=IS_IN_SET(status)),
+               Field('progress',default='pending',requires=IS_IN_SET(progress)),
+                auth.signature
+               )
+
+db.define_table('other',
+               Field('category',requires=IS_NOT_EMPTY()),
+               Field('subject',requires=IS_NOT_EMPTY()),
+               Field('description','text',requires=IS_NOT_EMPTY()),
+               Field('image','upload',requires=IS_EMPTY_OR(IS_IMAGE())),
+               Field('place',requires=IS_NOT_EMPTY()),
+               Field('iden','reference auth_user',default=auth.user_id,readable=False,writable=False),
+               Field('status',default='unapproved',requires=IS_IN_SET(status)),
+               Field('progress',default='pending',requires=IS_IN_SET(progress)),
+                auth.signature
+               )

@@ -1,0 +1,108 @@
+# -*- coding: utf-8 -*-
+# this file is released under public domain and you can use without limitations
+
+#########################################################################
+## This is a sample controller
+## - index is the default action of any application
+## - user is required for authentication and authorization
+## - download is for downloading files uploaded in the db (does streaming)
+#########################################################################
+@auth.requires_login()
+def index():
+    """
+    example action using the internationalization operator T and flash
+    rendered by views/default/index.html or views/generic.html
+
+    if you need a simple wiki simply replace the two lines below with:
+    return auth.wiki()
+    """
+    response.flash = T("Hello")
+    return dict(message=T('Welcome to hostel management portal!'))
+
+def electricals():
+    db.electrical.status.writable=False
+    db.electrical.status.readable=False
+    db.electrical.progress.writable=False
+    db.electrical.progress.readable=False
+    form=SQLFORM(db.electrical).process()
+    return locals()
+
+def waters():
+    db.water.status.writable=False
+    form=SQLFORM(db.water)
+    return locals()
+def washingmachines():
+    db.washingmachine.status.writable=False
+    form=SQLFORM(db.washingmachine)
+    return locals()
+def others():
+    db.other.status.writable=False
+    form=SQLFORM(db.other)
+    return locals()
+
+def problem():
+    return locals()
+
+def options_widget(field,value,**kwargs):
+    """ Use web2py's intelligence to set up the right HTML for the select field
+     the widgets knows about the database model """
+    w = SQLFORM.widgets.options.widget
+    xml = w(field,value,**kwargs)
+    return xml
+
+def options_widget(field,value,**kwargs):
+    return SQLFORM.widgets.options.widget(field,value,**kwargs)
+@auth.requires_membership("moderator")
+def editable_grid():
+    #process submitted form
+    if len(request.post_vars) > 0:
+        for key, value in request.post_vars.iteritems():   
+            (field_name,sep,row_id) = key.partition('_row_') #name looks like home_state_row_99
+            if row_id:
+                db(db.electrical).update(**{field_name:value})
+    db.electrical.status.represent = lambda value,row:  options_widget(db.electrical.status,value,
+                     **{'_name':'status_row_%s' % row.id})
+    grid = SQLFORM.grid(db.electrical,orderby=~db.electrical.created_on,create=False,details=False,editable=False,selectable= lambda ids : redirect(URL('default','editable_grid',vars=request._get_vars)))
+    grid.elements(_type='checkbox',_name='records',replace=None)
+    return dict(grid=grid)
+
+def display():
+    rows=db(db.electrical.status=='approved').select(orderby=~db.electrical.created_on)
+    return locals()
+
+def user():
+    """
+    exposes:
+    http://..../[app]/default/user/login
+    http://..../[app]/default/user/logout
+    http://..../[app]/default/user/register
+    http://..../[app]/default/user/profile
+    http://..../[app]/default/user/retrieve_password
+    http://..../[app]/default/user/change_password
+    http://..../[app]/default/user/bulk_register
+    use @auth.requires_login()
+        @auth.requires_membership('group name')
+        @auth.requires_permission('read','table name',record_id)
+    to decorate functions that need access control
+    also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
+    """
+    return dict(form=auth())
+
+
+@cache.action()
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)
+
+
+def call():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return service()

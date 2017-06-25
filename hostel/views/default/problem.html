@@ -1,0 +1,28 @@
+{{extend 'layout.html'}}
+<div class="college-logo" style="float:right;">
+            <a href="https://iiit.ac.in/">
+                <img src="https://iiit.ac.in/img/iiit-new.png" alt="IIIT Logo" />
+            </a>
+    </div>
+<br />
+<h2>Click on the Fields below to post Complaints:</h2>
+    <div class="col-sm-9" style="border:2px solid black;width:50%;margin:1%;padding:1.5%;">
+        ELECTRICAL: Involves all kinds of electrical problems,except washing machines<br />
+        {{=A('electrical',_class="btn btn-info",_href=URL('electricals'))}}</div>
+    <div class="col-sm-9" style="border:2px solid black;width:50%;margin:1%;padding:1.5%;">
+        PLUMBING: Involves all kinds of plumbing/water problems,except washing machines<br />
+        {{=A('Plumbing',_class="btn btn-info",_href=URL('waters'))}}</div>
+    <div class="col-sm-9" style="border:2px solid black;width:50%;margin:1%;padding:1.5%;">
+        ELECTRICAL: Involves all kinds of electrical problems,except washing machines<br />
+        {{=A('washingmachine',_class="btn btn-info",_href=URL('washingmachines'))}}</div>
+    <div class="col-sm-9" style="border:2px solid black;width:50%;margin:1%;padding:1.5%;">
+        ELECTRICAL: Involves all kinds of electrical problems,except washing machines<br />
+        {{=A('other',_class="btn btn-info",_href=URL('others'))}}</div>
+    <div style="border:2px solid black;width:30%;margin:1%;padding:1.5%; float:right;">
+        AMBULANCE:<br />        
+         Name: Shri Umapathy<br>
+        Mobile No.: 9676477748</div>
+        
+        
+</div>
+</body>
